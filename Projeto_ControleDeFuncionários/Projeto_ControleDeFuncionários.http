@@ -1,0 +1,6 @@
+@Projeto_ControleDeFuncionários_HostAddress = http://localhost:5247
+
+GET {{Projeto_ControleDeFuncionários_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
