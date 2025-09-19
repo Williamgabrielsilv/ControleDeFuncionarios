@@ -14,6 +14,6 @@ namespace Projeto_ControleDeFuncionários.Banco_de_dados
         public DbSet<Cargo> Cargos { get; set; }
         public DbSet<Ferias> Ferias_ { get; set; }
         public DbSet<HistoricoSalario> HistoricoSalarios { get; set; }
-
+        public object User { get; internal set; }
     }
 }

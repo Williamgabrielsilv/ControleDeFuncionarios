@@ -1,6 +1,10 @@
-﻿namespace Projeto_ControleDeFuncionários.Repositories.Interfaces
+﻿using Projeto_ControleDeFuncionários.Models;
+
+namespace Projeto_ControleDeFuncionários.Repositories.Interfaces
 {
     public interface IUserRepository
     {
+        Task<User?>GetByEmailAsync(string email);
+        Task<User> CreateAsync(User user);
     }
 }
