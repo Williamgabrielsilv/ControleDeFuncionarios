@@ -41,6 +41,8 @@ namespace Projeto_ControleDeFuncionários.Controller
                 CPF = userRequestDto.CPF,
                 Email = userRequestDto.Email,
                 Senha = senhaHash,
+                LevelAccess = (int)userRequestDto.LevelAccess,
+                Celular = userRequestDto.Celular,
                 DataDeNascimento = userRequestDto.DataDeNascimento,
                 DepartamentoId = userRequestDto.DepartamentoId
             };
@@ -51,6 +53,7 @@ namespace Projeto_ControleDeFuncionários.Controller
                 Id = user.Id,
                 Nome = user.Nome,
                 CPF = user.CPF,
+                Celular = user.Celular,
                 Email = user.Email,
                 DataDeNascimento = user.DataDeNascimento,
                 DepartamentoId = user.DepartamentoId

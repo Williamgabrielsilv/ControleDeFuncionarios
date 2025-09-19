@@ -21,6 +21,11 @@ namespace Projeto_ControleDeFuncionários.Models
         [EmailAddress(ErrorMessage = "Email inválido")]
         public string Email { get; set; }
         public string Senha { get; set; }
+        public string Celular { get; set; }
+
+        public bool Valid { get; set; }
+        [Required]
+        public int LevelAccess { get; set; }
 
         [Required(ErrorMessage = "Cargo obrigatório")]
         public string Cargo { get; set; }
