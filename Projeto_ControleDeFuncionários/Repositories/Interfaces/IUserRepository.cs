@@ -7,19 +7,16 @@ namespace Projeto_ControleDeFuncionários.Repositories.Interfaces
         Task<User?>GetByEmailAsync(string email);
         Task<User> CreateAsync(User user);
     
-    /*CREATE
-        Task<User> CreateAsync(User user);
-
+    
         // READ
-        Task<User?> GetByIdAsync(int id);
-        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByIdAsync(int id); 
         Task<IEnumerable<User>> GetAllAsync();
 
         // UPDATE
         Task UpdateAsync(User user);
 
         // DELETE
-        Task DeleteAsync(int id);*/
+        Task DeleteAsync(int id);
     }
     
 }

@@ -1,4 +1,6 @@
-﻿namespace Projeto_ControleDeFuncionários.DTOs.Request
+﻿using Projeto_ControleDeFuncionários.Enums;
+
+namespace Projeto_ControleDeFuncionários.DTOs.Request
 {
     public class UserRequestDto
     {

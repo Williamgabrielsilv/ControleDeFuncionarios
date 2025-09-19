@@ -17,11 +17,31 @@ namespace Projeto_ControleDeFuncionários.Repositories
             return user;
         }
 
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<User>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
-    
+
+        public Task<User?> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /* READ
         public async Task<User?> GetByIdAsync(int id)
