@@ -61,5 +61,101 @@ namespace Projeto_ControleDeFuncionários.Controller
             return Ok(response);
 
         }
+        /*[HttpGet("getAll")]
+public async Task<IActionResult> GetAllUsers()
+{
+    var users = await _userRepository.GetAllAsync();
+
+    var response = users.Select(u => new UserResponseDto
+    {
+        Id = u.Id,
+        Nome = u.Nome,
+        CPF = u.CPF,
+        Celular = u.Celular,
+        Email = u.Email,
+        DataDeNascimento = u.DataDeNascimento,
+        DepartamentoId = u.DepartamentoId
+    });
+
+    return Ok(response);
+}
+
+[HttpGet("getById/{id}")]
+public async Task<IActionResult> GetById(int id)
+{
+    var user = await _userRepository.GetByIdAsync(id);
+
+    if (user == null)
+        return NotFound("Usuário não encontrado.");
+
+    var response = new UserResponseDto
+    {
+        Id = user.Id,
+        Nome = user.Nome,
+        CPF = user.CPF,
+        Celular = user.Celular,
+        Email = user.Email,
+        DataDeNascimento = user.DataDeNascimento,
+        DepartamentoId = user.DepartamentoId
+    };
+
+    return Ok(response);
+}
+[HttpPut("updateUser/{id}")]
+public async Task<IActionResult> UpdateUser(int id, [FromBody] UserRequestDto userRequestDto)
+{
+    var user = await _userRepository.GetByIdAsync(id);
+
+    if (user == null)
+        return NotFound("Usuário não encontrado.");
+
+    // Atualiza os dados
+    user.Nome = userRequestDto.Nome;
+    user.CPF = userRequestDto.CPF;
+    user.Email = userRequestDto.Email;
+    user.Celular = userRequestDto.Celular;
+    user.DataDeNascimento = userRequestDto.DataDeNascimento;
+    user.DepartamentoId = userRequestDto.DepartamentoId;
+
+    // Se precisar atualizar a senha
+    if (!string.IsNullOrEmpty(userRequestDto.Senha))
+    {
+        using var sha256 = SHA256.Create();
+        user.Senha = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(userRequestDto.Senha)));
+    }
+
+    await _userRepository.UpdateAsync(user);
+
+    return Ok("Usuário atualizado com sucesso!");
+}
+[HttpPatch("updateField/{id}")]
+public async Task<IActionResult> UpdateField(int id, [FromBody] JsonPatchDocument<User> patchDoc)
+{
+    if (patchDoc == null)
+        return BadRequest();
+
+    var user = await _userRepository.GetByIdAsync(id);
+    if (user == null)
+        return NotFound("Usuário não encontrado.");
+
+    patchDoc.ApplyTo(user);
+
+    await _userRepository.UpdateAsync(user);
+
+    return Ok("Campo atualizado com sucesso!");
+}
+[HttpDelete("deleteUser/{id}")]
+public async Task<IActionResult> DeleteUser(int id)
+{
+    var user = await _userRepository.GetByIdAsync(id);
+
+    if (user == null)
+        return NotFound("Usuário não encontrado.");
+
+    await _userRepository.DeleteAsync(id);
+
+    return Ok("Usuário deletado com sucesso!");
+}*/
+
     }
 }
