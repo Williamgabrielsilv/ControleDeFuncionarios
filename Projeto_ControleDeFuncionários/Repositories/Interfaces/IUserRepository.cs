@@ -1,11 +1,12 @@
-﻿using Projeto_ControleDeFuncionários.Models;
+﻿using Projeto_ControleDeFuncionários.DTOs.Response;
+using Projeto_ControleDeFuncionários.Models;
 
 namespace Projeto_ControleDeFuncionários.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User?>GetByEmailAsync(string email);
-        Task<User> CreateAsync(User user);
+        Task<UserResponseDto?>GetByEmailAsync(string email);
+        Task<UserResponseDto> CreateAsync(User user);
     
     
         // READ

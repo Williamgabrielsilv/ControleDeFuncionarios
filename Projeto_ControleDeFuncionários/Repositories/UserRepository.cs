@@ -1,57 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projeto_ControleDeFuncionários.Banco_de_dados;
+using Projeto_ControleDeFuncionários.DTOs.Response;
+using Projeto_ControleDeFuncionários.Mappers;
 using Projeto_ControleDeFuncionários.Models;
 using Projeto_ControleDeFuncionários.Repositories.Interfaces;
 
+
 namespace Projeto_ControleDeFuncionários.Repositories
 {
-    
+        
     public class UserRepository(banco_de_dados context) : IUserRepository
     {
         private readonly banco_de_dados _context = context; //Construtor
-
-        public async Task<User> CreateAsync(User user)
+        public async Task<UserResponseDto?> GetByEmailAsync(string email)
+        {
+            
+            return UserMapper.ToResponseDto(await _context.Users.FirstOrDefaultAsync(u => u.Email == email));
+        }
+        public async Task<UserResponseDto> CreateAsync(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return user;
+            return UserMapper.ToResponseDto(user);
         }
 
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<User>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User?> GetByEmailAsync(string email)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public Task<User?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        /* READ
+        
+        // READ
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
-        }
-
-        public async Task<User?> GetByEmailAsync(string email)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -75,7 +52,9 @@ namespace Projeto_ControleDeFuncionários.Repositories
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
             }
-        }*/
+        }
+
+       
     }
 
 

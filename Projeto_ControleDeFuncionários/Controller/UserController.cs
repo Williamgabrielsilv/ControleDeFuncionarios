@@ -6,6 +6,7 @@ using Projeto_ControleDeFuncionários.DTOs.Response;
 using System.Security.Cryptography;
 using System.Text;
 using Projeto_ControleDeFuncionários.DTOs.Update;
+using Projeto_ControleDeFuncionários.Mappers;
 
 
 
@@ -30,35 +31,11 @@ namespace Projeto_ControleDeFuncionarios.Controller
             {
                 return BadRequest("Email já cadastrado.");
             }
-
-            //Transforma senha em Hash
-            using var sha256 = SHA256.Create();
-            var senhaHash = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(userRequestDto.Senha)));
-
+    
             //Transforma o request para o modelo do banco
-            var user = new User
-            {
-                Nome = userRequestDto.Nome,
-                CPF = userRequestDto.CPF,
-                Email = userRequestDto.Email,
-                Senha = senhaHash,
-                LevelAccess = (int)userRequestDto.LevelAccess,
-                Celular = userRequestDto.Celular,
-                DataDeNascimento = userRequestDto.DataDeNascimento,
-                DepartamentoId = userRequestDto.DepartamentoId
-            };
-            var userDb = await _userRepository.CreateAsync(user);
-            //Transforma o modelo do banco em response
-            var response = new UserResponseDto
-            {
-                Id = user.Id,
-                Nome = user.Nome,
-                CPF = user.CPF,
-                Celular = user.Celular,
-                Email = user.Email,
-                DataDeNascimento = user.DataDeNascimento,
-                DepartamentoId = user.DepartamentoId
-            };
+            var user = UserMapper.ToModel(userRequestDto);
+            var response = await _userRepository.CreateAsync(user);
+            
             return Ok(response);
 
         }
