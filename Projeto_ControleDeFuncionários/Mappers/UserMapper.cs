@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Projeto_ControleDeFuncionários.DTOs.Request;
 using Projeto_ControleDeFuncionários.DTOs.Response;
+using Projeto_ControleDeFuncionários.DTOs.Update;
 using Projeto_ControleDeFuncionários.Helpers;
 using Projeto_ControleDeFuncionários.Models;
 
@@ -40,6 +41,29 @@ namespace Projeto_ControleDeFuncionários.Mappers
                 Valid = user.Valid, 
             };
         }
+        public static List<UserResponseDto> ToResponseDtoList(List<User> users)
+        {
+            return users.Select(ToResponseDto).Where(dto => dto != null).ToList()!;
+        }
+
+        public static void UpdateModelFromDto(User user, UserUpdateDto dto)
+        {
+            if (!string.IsNullOrWhiteSpace(dto.Nome))
+                user.Nome = dto.Nome;
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+                user.Email = dto.Email;
+
+            if (!string.IsNullOrWhiteSpace(dto.Celular))
+                user.Celular = dto.Celular;
+
+            if (dto.DepartamentoId.HasValue)
+                user.DepartamentoId = dto.DepartamentoId.Value;
+
+            if (!string.IsNullOrWhiteSpace(dto.Senha))
+                user.Senha = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
+        }
+
 
     }
 }

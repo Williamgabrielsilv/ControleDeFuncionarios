@@ -44,16 +44,8 @@ namespace Projeto_ControleDeFuncionarios.Controller
         {
             var users = await _userRepository.GetAllAsync();
 
-            var response = users.Select(u => new Projeto_ControleDeFuncionários.DTOs.Response.UserResponseDto
-            {
-                Id = u.Id,
-                Nome = u.Nome,
-                CPF = u.CPF,
-                Celular = u.Celular,
-                Email = u.Email,
-                DataDeNascimento = u.DataDeNascimento,
-                DepartamentoId = u.DepartamentoId
-            });
+            var response = UserMapper.ToResponseDtoList((List<User>)users);
+
 
             return Ok(response);
         }
@@ -66,50 +58,25 @@ namespace Projeto_ControleDeFuncionarios.Controller
             if (user == null)
                 return NotFound("Usuário não encontrado.");
 
-            var response = new UserResponseDto
-            {
-                Id = user.Id,
-                Nome = user.Nome,
-                CPF = user.CPF,
-                Celular = user.Celular,
-                Email = user.Email,
-                DataDeNascimento = user.DataDeNascimento,
-                DepartamentoId = user.DepartamentoId
-            };
+            var response = UserMapper.ToResponseDto(user);
 
             return Ok(response);
         }
+
         [HttpPatch("updateUser/{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
-
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
                 return NotFound("Usuário não encontrado.");
 
-            // Atualiza apenas os campos enviados
-            if (!string.IsNullOrEmpty(userUpdateDto.Nome))
-                user.Nome = userUpdateDto.Nome;
-
-            if (!string.IsNullOrEmpty(userUpdateDto.Email))
-                user.Email = userUpdateDto.Email;
-
-            if (!string.IsNullOrEmpty(userUpdateDto.Celular))
-                user.Celular = userUpdateDto.Celular;
-
-            if (userUpdateDto.DepartamentoId.HasValue)
-                user.DepartamentoId = userUpdateDto.DepartamentoId.Value;
-
-            if (!string.IsNullOrEmpty(userUpdateDto.Senha))
-            {
-                using var sha256 = SHA256.Create();
-                user.Senha = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(userUpdateDto.Senha)));
-            }
+            UserMapper.UpdateModelFromDto(user, userUpdateDto);
 
             await _userRepository.UpdateAsync(user);
 
             return Ok("Usuário atualizado com sucesso!");
         }
+
         [HttpDelete("deleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
