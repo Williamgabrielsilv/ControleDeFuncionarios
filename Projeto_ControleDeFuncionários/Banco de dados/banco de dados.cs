@@ -12,8 +12,10 @@ namespace Projeto_ControleDeFuncionários.Banco_de_dados
         public DbSet<User> Users { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }    
         public DbSet<Cargo> Cargos { get; set; }
+        public DbSet<RegistroPonto> RegistrosPonto { get; set; }
+        public DbSet<Afastamento> Afastamentos { get; set; }
+
         public DbSet<Ferias> Ferias_ { get; set; }
         public DbSet<HistoricoSalario> HistoricoSalarios { get; set; }
-        public object User { get; internal set; }
     }
 }

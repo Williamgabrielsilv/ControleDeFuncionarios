@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Projeto_ControleDeFuncionários.DTOs.Request;
-using Projeto_ControleDeFuncionários.Models;
-using Projeto_ControleDeFuncionários.Repositories.Interfaces;
-using Projeto_ControleDeFuncionários.DTOs.Response;
-using System.Security.Cryptography;
-using System.Text;
-using Projeto_ControleDeFuncionários.DTOs.Update;
-using Projeto_ControleDeFuncionários.Mappers;
+using Projeto_ControleDeFuncionários.Services.Interfaces;
 
 
 
@@ -17,78 +11,90 @@ namespace Projeto_ControleDeFuncionarios.Controller
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
-        [HttpPost("registerUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRequestDto userRequestDto)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserRequestDto userDto)
         {
-            //verifica se existe um usuário com o email cadastrado
-            bool existingUser = await _userRepository.GetByEmailAsync(userRequestDto.Email) != null;
-            if (existingUser)
+            try
             {
-                return BadRequest("Email já cadastrado.");
+                var response = await _userService.RegisterAsync(userDto);
+                return Ok(response);
             }
-    
-            //Transforma o request para o modelo do banco
-            var user = UserMapper.ToModel(userRequestDto);
-            var response = await _userRepository.CreateAsync(user);
-            
-            return Ok(response);
-
-        }
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var users = await _userRepository.GetAllAsync();
-
-            var response = UserMapper.ToResponseDtoList((List<User>)users);
-
-
-            return Ok(response);
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
-        [HttpGet("getById/{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody] UserRequestUpdateDto userDto)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-
-            if (user == null)
-                return NotFound("Usuário não encontrado.");
-
-            var response = UserMapper.ToResponseDto(user);
-
-            return Ok(response);
+            try
+            {
+                var response = await _userService.UpdateAsync(userDto);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
-        [HttpPatch("updateUser/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
+        [HttpPatch("updatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UserRequestUpdatePasswordDto passDto)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-                return NotFound("Usuário não encontrado.");
-
-            UserMapper.UpdateModelFromDto(user, userUpdateDto);
-
-            await _userRepository.UpdateAsync(user);
-
-            return Ok("Usuário atualizado com sucesso!");
+            try
+            {
+                await _userService.UpdatePasswordAsync(passDto);
+                return Ok("Senha atualizada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpDelete("deleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-
-            if (user == null)
-                return NotFound("Usuário não encontrado.");
-
-            await _userRepository.DeleteAsync(id);
-
-            return Ok("Usuário deletado com sucesso!");
+            try
+            {
+                await _userService.DeleteUserAsync(id);
+                return Ok("Usuário deletado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
+
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _userService.GetAllAsync();
+            return Ok(response);
+
+        }
+
+        [HttpGet("getById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                
+                return Ok(await _userService.GetByIdAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+        }
+
 
     }
 }

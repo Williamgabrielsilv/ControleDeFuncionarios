@@ -16,54 +16,63 @@ namespace Projeto_ControleDeFuncionários.Mappers
             {
                 Nome = UserRequestDto.Nome,
                 CPF = UserRequestDto.CPF,
+                Cargo = UserRequestDto.Cargo,
+                Salario = UserRequestDto.Salario,
                 Email = UserRequestDto.Email,
                 Celular = UserRequestDto.Celular,
                 LevelAccess = (int)UserRequestDto.LevelAccess,
                 DataDeAdmissao = DateTime.Now,
                 DataDeNascimento = UserRequestDto.DataDeNascimento,
                 Senha = PasswordHasher.ToBcrypt(UserRequestDto.Senha),
+                Convenio = UserRequestDto.Convenio,
+                Endereco = UserRequestDto.Endereco,
+
             };
         }
         public static UserResponseDto? ToResponseDto(User user)
         {
-            if (user.Id == 0) 
+            if (user == null) 
                 return null;
 
             return new UserResponseDto
             {
                 Id = user.Id,
                 Nome = user.Nome,
+                Cargo = user.Cargo,
                 CPF = user.CPF,
                 Celular = user.Celular,
                 Email = user.Email,
                 DataDeNascimento = user.DataDeNascimento,
-                DepartamentoId = user.DepartamentoId,
                 Valid = user.Valid, 
             };
         }
         public static List<UserResponseDto> ToResponseDtoList(List<User> users)
         {
             return users.Select(ToResponseDto).Where(dto => dto != null).ToList()!;
+
         }
 
-        public static void UpdateModelFromDto(User user, UserUpdateDto dto)
+        public static User ToUpdateModel(UserRequestUpdateDto userRequestUpdateDto)
         {
-            if (!string.IsNullOrWhiteSpace(dto.Nome))
-                user.Nome = dto.Nome;
-
-            if (!string.IsNullOrWhiteSpace(dto.Email))
-                user.Email = dto.Email;
-
-            if (!string.IsNullOrWhiteSpace(dto.Celular))
-                user.Celular = dto.Celular;
-
-            if (dto.DepartamentoId.HasValue)
-                user.DepartamentoId = dto.DepartamentoId.Value;
-
-            if (!string.IsNullOrWhiteSpace(dto.Senha))
-                user.Senha = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
+            return new User
+            {
+                Id = userRequestUpdateDto.Id,
+                Nome = userRequestUpdateDto.Name,
+                CPF = userRequestUpdateDto.Cpf,
+                Email = userRequestUpdateDto.Email,
+                Celular = userRequestUpdateDto.Celular,
+                LevelAccess = (int)userRequestUpdateDto.LevelAccess,
+                DataDeNascimento = userRequestUpdateDto.DataDeNascimento
+            };
         }
-
+        public static User ToUpdatePasswordModel(UserRequestUpdatePasswordDto passDto)
+        {
+            return new User
+            {
+                Id = passDto.IdUser,
+                Senha = passDto.NewPassword,
+            };
+        }
 
     }
 }

@@ -34,6 +34,5 @@ namespace Projeto_ControleDeFuncionários.Models
         public DateTime DataDeAdmissao { get; set; }
         public string DataDeNascimento { get; set; }
         public string Convenio { get; set; }
-        public int DepartamentoId { get; internal set; }
     }
 }
